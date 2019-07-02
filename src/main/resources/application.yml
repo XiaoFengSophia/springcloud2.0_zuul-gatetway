@@ -1,0 +1,56 @@
+###网关名称
+spring:
+  application:
+    name: service-zuul
+  #使用springCloud 配置中心动态刷新
+  cloud: 
+     config: 
+    ####读取后缀
+      profile: dev
+      ####读取服务端(config-server)注册地址
+      discovery:
+        service-id: config-server
+        #开启读取权限
+        enabled: true
+###注册 中心
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8100/eureka/
+server:
+  port: 82
+  #硬配置，非动态
+### 配置网关反向代理    注：Zuul 默认开启了 Ribbon本地负载均衡功能
+#zuul: 
+#  routes:
+#    api-a:
+#     ### 以 /api-member/访问转发到会员服务(代理地址)
+#      path: /api-member/**
+#      #注册在Eureka中member服务别名(实际地址)
+#      serviceId: zxf-lancoo-member
+#    api-b:
+#        ### 以 /api-order/访问转发到订单服务(代理地址)
+#      path: /api-order/**
+#      #注册在Eureka中order服务别名(实际地址)
+#      serviceId: zxf-lancoo-order
+#    api-c: 
+#        ###以 /api-pay/访问转发到支付服务(代理地址)
+#      path: /api-pay/**
+#      #注册在Eureka中order服务别名(实际地址)
+#      serviceId: zxf-lancoo-feignMember
+    
+###开启所有监控中心接口
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#配置路由重试
+#是否开启重试功能
+zuul: 
+ retryable: true
+#对当前服务的重试次数
+ribbon: 
+ MaxAutoRetries: 2
+#切换相同Server的次数
+ MaxAutoRetriesNextServer: 0
